@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>FB Viral Research — Teixeira Camila</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root{--bg:#0f0f0f;--s1:#1a1a1a;--s2:#242424;--bd:#2e2e2e;--gold:#c9a84c;--gdim:#8a6d2e;--tx:#f0ede8;--mu:#888;--ac:#e07b4a;--gr:#4caf82;--rd:#CC2200;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;font-size:15px;}
+header{background:var(--s1);border-bottom:1px solid var(--bd);padding:14px 16px;position:sticky;top:0;z-index:100;}
+.hi{display:flex;align-items:center;gap:10px;}
+.logo{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--ac));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ht h1{font-size:15px;font-weight:700;}
+.ht p{font-size:11px;color:var(--mu);margin-top:1px;}
+main{padding:16px;max-width:480px;margin:0 auto;}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:14px;}
+.ct{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.ng{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.nb{background:var(--s2);border:1.5px solid var(--bd);border-radius:10px;padding:12px 10px;cursor:pointer;text-align:center;color:var(--mu);font-size:13px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .2s;}
+.nb.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.08);}
+.nb .em{font-size:22px;}
+.dur-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.dur-btn{background:var(--s2);border:1.5px solid var(--bd);border-radius:8px;padding:9px 4px;text-align:center;cursor:pointer;font-size:12px;font-weight:600;color:var(--mu);transition:all .2s;}
+.dur-btn.active{border-color:var(--ac);color:var(--ac);background:rgba(224,123,74,.08);}
+.qr{display:flex;gap:8px;}
+.qb{background:var(--s2);border:1.5px solid var(--bd);border-radius:8px;padding:10px 0;flex:1;text-align:center;cursor:pointer;font-size:13px;font-weight:600;color:var(--mu);transition:all .2s;}
+.qb.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.08);}
+input[type=text]{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-size:14px;padding:11px 12px;font-family:'Inter',sans-serif;outline:none;}
+input[type=text]:focus{border-color:var(--gold);}
+input::placeholder{color:var(--mu);}
+.gen-btn{width:100%;background:linear-gradient(135deg,var(--gold),var(--ac));border:none;border-radius:12px;padding:16px;font-size:15px;font-weight:700;color:#0f0f0f;cursor:pointer;margin-bottom:16px;transition:opacity .2s;}
+.gen-btn:hover{opacity:.92;}
+.gen-btn:disabled{opacity:.5;cursor:not-allowed;}
+/* loading */
+#loading{display:none;text-align:center;padding:40px 16px;}
+#loading.show{display:block;}
+.spin{width:44px;height:44px;border:3px solid var(--bd);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loadmsg{font-size:15px;font-weight:600;margin-bottom:4px;}
+/* results */
+#results{display:none;}
+#results.show{display:block;}
+.back-btn{width:100%;background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:13px;font-size:14px;font-weight:600;color:var(--mu);cursor:pointer;margin-bottom:16px;}
+/* page item */
+.pi{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:8px;}
+.pih{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+.pn{font-size:14px;font-weight:700;}
+.pf{font-size:11px;font-weight:600;color:var(--gold);background:rgba(201,168,76,.1);padding:2px 7px;border-radius:20px;white-space:nowrap;}
+/* reel card */
+.rc{background:var(--s1);border:1px solid var(--bd);border-radius:12px;margin-bottom:14px;overflow:hidden;}
+.rh{background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(224,123,74,.1));border-bottom:1px solid var(--bd);padding:12px 14px;display:flex;align-items:center;gap:10px;}
+.rnum{width:28px;height:28px;background:var(--gold);color:#0f0f0f;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;}
+.hl-preview{padding:12px 14px;border-bottom:1px solid var(--bd);}
+.hl-box{background:#111;border-radius:8px;padding:14px;text-align:center;}
+.hl-main{background:#CC2200;color:#fff;font-size:14px;font-weight:800;text-transform:uppercase;padding:8px 12px;border-radius:6px;line-height:1.3;margin-bottom:6px;}
+.hl-sub{background:rgba(0,0,0,.7);color:#fff;font-size:11px;padding:4px 10px;border-radius:4px;display:inline-block;}
+.rtabs{display:flex;border-bottom:1px solid var(--bd);overflow-x:auto;scrollbar-width:none;}
+.rtabs::-webkit-scrollbar{display:none;}
+.rtab{padding:10px 14px;font-size:12px;font-weight:600;color:var(--mu);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;flex-shrink:0;transition:all .2s;}
+.rtab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.rpanel{display:none;padding:14px;}
+.rpanel.active{display:block;}
+.cbox{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:12px;font-size:12px;line-height:1.8;color:var(--tx);white-space:pre-wrap;word-break:break-word;}
+.copy-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:10px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:10px;font-size:12px;font-weight:600;color:var(--mu);cursor:pointer;transition:all .2s;}
+.copy-btn:hover{border-color:var(--gold);color:var(--gold);}
+.copy-btn.ok{color:var(--gr);border-color:var(--gr);}
+.sync-bar{display:flex;justify-content:space-between;align-items:center;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px;}
+.el-card{background:linear-gradient(135deg,rgba(201,168,76,.06),rgba(224,123,74,.04));border:1px solid rgba(201,168,76,.25);border-radius:10px;padding:14px;margin-bottom:12px;}
+.el-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px;}
+.el-row:last-child{border-bottom:none;}
+.shot-block{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:12px;margin-bottom:8px;}
+.shot-labels{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.tag-gold{background:var(--gold);color:#0f0f0f;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700;}
+.tag-muted{background:var(--s1);border:1px solid var(--bd);border-radius:4px;padding:1px 6px;font-size:10px;color:var(--mu);}
+.tag-green{background:rgba(76,175,130,.1);color:var(--gr);border-radius:4px;padding:1px 6px;font-size:9px;font-weight:700;}
+.tag-red{background:#CC2200;color:#fff;border-radius:4px;padding:1px 6px;font-size:9px;font-weight:700;}
+.hashtags{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:5px;}
+.htag{font-size:12px;color:var(--ac);font-weight:500;}
+.pill{display:inline-flex;align-items:center;gap:5px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:4px 10px;font-size:11px;color:var(--gold);margin-bottom:10px;}
+.err{background:rgba(224,85,85,.08);border:1px solid rgba(224,85,85,.3);border-radius:10px;padding:14px;color:#e05555;font-size:13px;margin-bottom:14px;display:none;}
+.err.show{display:block;}
+.section-title{font-size:14px;font-weight:700;margin-bottom:12px;}
+.divider{height:1px;background:var(--bd);margin:4px 0 16px;}
+.label-sm{font-size:10px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:var(--gdim);margin-bottom:6px;}
+.narr-box{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:12px;font-size:13px;line-height:2;color:var(--tx);white-space:pre-wrap;word-break:break-word;}
+.ptag{display:inline-block;background:rgba(76,175,130,.12);color:var(--gr);font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;margin:0 2px;}
+.etag{display:inline-block;background:rgba(201,168,76,.12);color:var(--gold);font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;margin:0 2px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hi">
+    <div class="logo">🔍</div>
+    <div class="ht">
+      <h1>FB Viral Research</h1>
+      <p>Teixeira Camila — Benchmark + Produção</p>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- FORM -->
+  <div id="form-section">
+    <div class="err" id="err-box"></div>
+
+    <div class="card">
+      <div class="ct">Nicho principal</div>
+      <div class="ng">
+        <div class="nb active" data-n="fe" onclick="selN(this)"><span class="em">🙏</span>Fé</div>
+        <div class="nb" data-n="familia" onclick="selN(this)"><span class="em">👨‍👩‍👧</span>Família</div>
+        <div class="nb" data-n="saude" onclick="selN(this)"><span class="em">🌿</span>Saúde</div>
+        <div class="nb" data-n="combinado" onclick="selN(this)"><span class="em">✨</span>Combinado</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ct">Duração do vídeo</div>
+      <div class="dur-row">
+        <div class="dur-btn" data-d="30" onclick="selD(this)">30s</div>
+        <div class="dur-btn active" data-d="45" onclick="selD(this)">45s</div>
+        <div class="dur-btn" data-d="60" onclick="selD(this)">1 min</div>
+        <div class="dur-btn" data-d="90" onclick="selD(this)">1m30</div>
+      </div>
+      <div style="font-size:11px;color:var(--mu);margin-top:8px;" id="dur-info">⚡ 98 palavras · 45s</div>
+    </div>
+
+    <div class="card">
+      <div class="ct">Reels a gerar</div>
+      <div class="qr">
+        <div class="qb active" data-q="1" onclick="selQ(this)">1 Reel</div>
+        <div class="qb" data-q="3" onclick="selQ(this)">3 Reels</div>
+        <div class="qb" data-q="5" onclick="selQ(this)">5 Reels</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ct">Tema específico (opcional)</div>
+      <input type="text" id="tema" placeholder="Ex: superação, oração, autoestima..." />
+    </div>
+
+    <button class="gen-btn" id="gen-btn" onclick="generate()">🚀 Pesquisar e Gerar Conteúdo</button>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loading">
+    <div class="spin"></div>
+    <div id="loadmsg">Buscando páginas gringas...</div>
+    <div style="font-size:12px;color:var(--mu);margin-top:4px;">Aguarde 30–60 segundos</div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results">
+    <button class="back-btn" onclick="goBack()">← Nova pesquisa</button>
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <div class="section-title" style="margin:0;">🏆 Top Páginas</div>
+        <div style="background:rgba(201,168,76,.15);color:var(--gold);font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;" id="pages-badge"></div>
+      </div>
+      <div id="pages-list"></div>
+    </div>
+    <div class="divider"></div>
+    <div class="section-title">🎬 Reels Prontos para Postar</div>
+    <div id="reels-list"></div>
+  </div>
+
+</main>
+
+<script>
+let curNiche='fe', curDur=45, curQty=1;
+const NICHE_MAP={fe:'Fé / Cristã',familia:'Família',saude:'Saúde Feminina',combinado:'Fé + Família + Saúde'};
+const durLabel=s=>s<60?s+'s':s===60?'1 minuto':Math.floor(s/60)+'min'+(s%60?s%60+'s':'');
+const wpm=s=>Math.round(s*130/60);
+const nshots=s=>Math.round(s/8);
+
+function selN(el){document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));el.classList.add('active');curNiche=el.dataset.n;}
+function selD(el){document.querySelectorAll('.dur-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');curDur=parseInt(el.dataset.d);document.getElementById('dur-info').textContent=`⚡ ${wpm(curDur)} palavras · ${durLabel(curDur)}`;}
+function selQ(el){document.querySelectorAll('.qb').forEach(b=>b.classList.remove('active'));el.classList.add('active');curQty=parseInt(el.dataset.q);}
+function setLoad(msg){document.getElementById('loadmsg').textContent=msg;}
+function showErr(msg){const e=document.getElementById('err-box');e.textContent='⚠️ '+msg;e.classList.add('show');}
+function hideErr(){document.getElementById('err-box').classList.remove('show');}
+function goBack(){document.getElementById('results').classList.remove('show');document.getElementById('form-section').style.display='block';document.getElementById('gen-btn').disabled=false;window.scrollTo(0,0);}
+
+async function ask(system,user){
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,system,messages:[{role:'user',content:user}]})
+  });
+  if(!r.ok){const t=await r.text().catch(()=>'');throw new Error('Erro API '+r.status+': '+t.slice(0,100));}
+  const d=await r.json();
+  return d.content?.[0]?.text||'';
+}
+
+function safeJSON(raw){
+  if(!raw)return null;
+  let c=raw.replace(/```json\s*/gi,'').replace(/```\s*/gi,'').trim();
+  try{return JSON.parse(c);}catch(_){}
+  const f=c.indexOf('{'),l=c.lastIndexOf('}');
+  if(f>-1&&l>f){try{return JSON.parse(c.slice(f,l+1));}catch(_){}}
+  try{
+    let a=c.slice(f>-1?f:0),br=0,bk=0,inS=false,esc=false;
+    for(const ch of a){if(esc){esc=false;continue;}if(ch==='\\'){esc=true;continue;}if(ch==='"'){inS=!inS;continue;}if(inS)continue;if(ch==='{')br++;if(ch==='}')br--;if(ch==='[')bk++;if(ch===']')bk--;}
+    let rep=a;if(inS)rep+='"';for(let i=0;i<bk;i++)rep+=']';for(let i=0;i<br;i++)rep+='}';
+    return JSON.parse(rep);
+  }catch(_){}
+  return null;
+}
+
+async function generate(){
+  hideErr();
+  const tema=document.getElementById('tema').value.trim();
+  const words=wpm(curDur), shots=nshots(curDur);
+  const SYS='Você é especialista em Reels virais cristãos para o mercado brasileiro. Perfil: Teixeira Camila, mulheres 35-60 anos, fé/família/saúde. Responda APENAS com JSON válido, sem markdown, sem texto fora do JSON.';
+
+  document.getElementById('form-section').style.display='none';
+  document.getElementById('gen-btn').disabled=true;
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('results').classList.remove('show');
+
+  try{
+    // 1 — benchmark
+    setLoad('🔍 Buscando top páginas gringas...');
+    const bRaw=await ask(SYS,`Liste 5 páginas gringas do Facebook nicho "${NICHE_MAP[curNiche]}"${tema?` foco "${tema}"`:''}. JSON: {"benchmark":[{"name":"","url":"","followers":"","content":"","hook":"","tags":[]}]}`);
+    const benchmark=(safeJSON(bRaw)||{}).benchmark||[];
+
+    const reels=[];
+    for(let i=1;i<=curQty;i++){
+      // 2 — narração
+      setLoad(`✍️ Reel ${i}/${curQty} — narração ${words} palavras...`);
+      const nRaw=await ask(SYS,`Reel viral ${i} nicho "${NICHE_MAP[curNiche]}"${tema?` foco "${tema}"`:''}${i>1?', conceito diferente':''}.
+JSON: {"title":"","source":"página gringa","headline_principal":"TEXTO VIRAL MAX 8 PALAVRAS","headline_sub":"complemento max 10 palavras","elevenlabs":{"voice_name":"Valentina","voice_id":"cgSgspJ2msm6clMCkdW9","modelo":"eleven_multilingual_v2","stability":0.35,"similarity_boost":0.85,"style":0.60,"speed":0.92,"justificativa":""},"narracao_elevenlabs":"script exato ${words} palavras PT-BR pastoral com [pausa curta] [pausa longa] [enfase] [sussurro] [emocao] gancho 3s CTA suave","total_palavras":${words}}`);
+      const nd=safeJSON(nRaw)||{};
+
+      // 3 — shots + seo
+      setLoad(`🎥 Reel ${i}/${curQty} — shots Veo 3 + SEO...`);
+      const sRaw=await ask(SYS,`Shots e SEO para reel "${nd.title||'viral'}" nicho "${NICHE_MAP[curNiche]}"${tema?` foco "${tema}"`:''}. ${shots} shots de 8s.
+SHOTS: iPhone 15 Pro Max selfie, mulher brasileira 35-50 anos rosto visível, ZERO fala ZERO voz, sons ambiente APENAS (vento/passaros/chuva/rua), microexpressoes (piscar/gesto/olhar/respirar), pele real poros sem AI-smoothing, dessaturado, headline vermelha #CC2200 bold branca APENAS shot 1.
+JSON: {"shots":[{"numero":1,"tempo":"0s-8s","headline_neste_shot":true,"descricao_cena":"","prompt_veo3":""}],"prompt_imagem":"","seo_titulo":"","seo_descricao":"","hashtags":["fe","deus","jesus","mulherdefe","superacao","familia","saude","esperanca","oracao","motivacao","mulher","maes","faith","christian","blessed"]}`);
+      const sd=safeJSON(sRaw)||{};
+
+      reels.push({title:nd.title||`Reel ${i}`,source:nd.source||'',duracao_total:durLabel(curDur),total_palavras:words,headline_principal:nd.headline_principal||'',headline_sub:nd.headline_sub||'',elevenlabs:nd.elevenlabs||{},narracao_elevenlabs:nd.narracao_elevenlabs||'',shots:sd.shots||[],prompt_imagem:sd.prompt_imagem||'',seo_titulo:sd.seo_titulo||'',seo_descricao:sd.seo_descricao||'',hashtags:sd.hashtags||[]});
+    }
+
+    document.getElementById('loading').classList.remove('show');
+    renderResults({benchmark,reels});
+  }catch(err){
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('form-section').style.display='block';
+    document.getElementById('gen-btn').disabled=false;
+    showErr(err.message||'Erro inesperado. Tente novamente.');
+  }
+}
+
+function renderResults(data){
+  document.getElementById('pages-badge').textContent=(data.benchmark||[]).length+' páginas';
+  const pl=document.getElementById('pages-list');pl.innerHTML='';
+  (data.benchmark||[]).forEach(p=>{
+    pl.innerHTML+=`<div class="pi"><div class="pih"><div class="pn">${p.name}</div><div class="pf">${p.followers}</div></div><div style="font-size:11px;color:var(--mu);margin-bottom:4px;">${p.url}</div><div style="font-size:12px;color:var(--mu);">${p.content}</div><div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;">${(p.tags||[]).map(t=>`<span style="font-size:10px;padding:2px 7px;border-radius:20px;background:var(--s2);border:1px solid var(--bd);color:var(--mu);">${t}</span>`).join('')}${p.hook?`<span style="font-size:10px;padding:2px 7px;border-radius:20px;border:1px solid var(--ac);color:var(--ac);">${p.hook}</span>`:''}</div></div>`;
+  });
+
+  const rl=document.getElementById('reels-list');rl.innerHTML='';
+  (data.reels||[]).forEach((r,i)=>{
+    const el=r.elevenlabs||{};
+    const tid=`r${i}`;
+    const shotsHTML=(r.shots||[]).map(s=>`
+      <div class="shot-block">
+        <div class="shot-labels">
+          <span class="tag-gold">SHOT ${s.numero}</span>
+          <span class="tag-muted">${s.tempo}</span>
+          <span class="tag-green">🔇 SEM VOZ</span>
+          ${s.headline_neste_shot?'<span class="tag-red">HEADLINE</span>':''}
+        </div>
+        ${s.descricao_cena?`<div style="font-size:11px;color:var(--mu);margin-bottom:8px;font-style:italic;">📍 ${s.descricao_cena}</div>`:''}
+        <div style="font-size:12px;line-height:1.65;white-space:pre-wrap;">${s.prompt_veo3||''}</div>
+        <button class="copy-btn" onclick="cp(this,'${encodeURIComponent(s.prompt_veo3||'')}')">📋 Copiar Shot ${s.numero}</button>
+      </div>`).join('');
+
+    const narrFormatted=(r.narracao_elevenlabs||'')
+      .replace(/\[pausa curta\]/gi,'<span class="ptag">⏸ PAUSA CURTA</span>')
+      .replace(/\[pausa longa\]/gi,'<span class="ptag">⏸⏸ PAUSA LONGA</span>')
+      .replace(/\[enfase\]/gi,'<span class="etag">★ ÊNFASE</span>')
+      .replace(/\[ênfase\]/gi,'<span class="etag">★ ÊNFASE</span>')
+      .replace(/\[sussurro\]/gi,'<span class="etag">🤫 SUSSURRO</span>')
+      .replace(/\[emocao\]/gi,'<span class="etag">💛 EMOÇÃO</span>')
+      .replace(/\[emoção\]/gi,'<span class="etag">💛 EMOÇÃO</span>');
+
+    rl.innerHTML+=`
+    <div class="rc">
+      <div class="rh">
+        <div class="rnum">${i+1}</div>
+        <div><div style="font-size:14px;font-weight:700;">${r.title}</div><div style="font-size:11px;color:var(--mu);">Inspirado em: ${r.source} · ${r.duracao_total}</div></div>
+      </div>
+      <div class="hl-preview">
+        <div style="font-size:10px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:var(--gdim);margin-bottom:8px;">Prévia da Headline</div>
+        <div class="hl-box">
+          <div class="hl-main">${r.headline_principal}</div>
+          ${r.headline_sub?`<div class="hl-sub">${r.headline_sub}</div>`:''}
+        </div>
+      </div>
+      <div class="rtabs">
+        <div class="rtab active" onclick="swTab('${tid}','narr',this)">🎙️ Narração</div>
+        <div class="rtab" onclick="swTab('${tid}','shots',this)">🎥 Veo 3</div>
+        <div class="rtab" onclick="swTab('${tid}','img',this)">🖼️ Imagem</div>
+        <div class="rtab" onclick="swTab('${tid}','seo',this)">📲 SEO</div>
+      </div>
+      <div class="rpanel active" id="${tid}-narr">
+        <div class="sync-bar"><span>⏱️ <strong style="color:var(--gold);">${r.duracao_total}</strong></span><span style="color:var(--mu);">${r.total_palavras} palavras · 130wpm</span></div>
+        <div class="el-card">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+            <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:800;color:#fff;">11</div>
+            <div style="font-size:12px;font-weight:700;color:var(--gold);">Configuração Eleven Labs</div>
+          </div>
+          ${[['🎤 Voz',el.voice_name,true],['🆔 Voice ID',el.voice_id,false],['🤖 Modelo',el.modelo||'eleven_multilingual_v2',false],['📊 Stability',el.stability,false],['🔗 Similarity',el.similarity_boost,false],['🎭 Style',el.style,false],['⚡ Speed',el.speed,false]].map(([k,v,hl])=>`<div class="el-row"><span style="color:var(--mu);">${k}</span><span style="color:${hl?'var(--gold)':'var(--tx)'};font-weight:600;font-size:${k.includes('ID')?'10':'12'}px;font-family:${k.includes('ID')?'monospace':'inherit'};text-align:right;max-width:200px;word-break:break-all;">${v||'—'}</span></div>`).join('')}
+          ${el.justificativa?`<div style="margin-top:8px;font-size:11px;color:var(--mu);line-height:1.5;padding-top:8px;border-top:1px solid rgba(255,255,255,.05);">💡 ${el.justificativa}</div>`:''}
+          <button class="copy-btn" onclick="cp(this,'${encodeURIComponent(JSON.stringify(el,null,2))}')">📋 Copiar JSON Eleven Labs</button>
+        </div>
+        <div class="label-sm">Script com Marcações</div>
+        <div class="narr-box">${narrFormatted}</div>
+        <button class="copy-btn" onclick="cp(this,'${encodeURIComponent(r.narracao_elevenlabs||'')}')">📋 Copiar narração completa</button>
+      </div>
+      <div class="rpanel" id="${tid}-shots">
+        <div class="pill">🎬 ${(r.shots||[]).length} shots × 8s · 🔇 Sem voz · Sons ambiente</div>
+        ${shotsHTML}
+      </div>
+      <div class="rpanel" id="${tid}-img">
+        <div class="pill">📱 Estilo iPhone · Headline vermelha embutida</div>
+        <div class="cbox">${r.prompt_imagem||''}</div>
+        <button class="copy-btn" onclick="cp(this,'${encodeURIComponent(r.prompt_imagem||'')}')">📋 Copiar prompt imagem</button>
+      </div>
+      <div class="rpanel" id="${tid}-seo">
+        <div class="label-sm" style="margin-bottom:6px;">Título</div>
+        <div class="cbox" style="font-size:14px;font-weight:600;">${r.seo_titulo||''}</div>
+        <button class="copy-btn" onclick="cp(this,'${encodeURIComponent(r.seo_titulo||'')}')">📋 Copiar título</button>
+        <div class="label-sm" style="margin:12px 0 6px;">Descrição</div>
+        <div class="cbox">${r.seo_descricao||''}</div>
+        <button class="copy-btn" onclick="cp(this,'${encodeURIComponent(r.seo_descricao||'')}')">📋 Copiar descrição</button>
+        <div class="label-sm" style="margin:12px 0 6px;">Hashtags</div>
+        <div class="hashtags">${(r.hashtags||[]).map(h=>`<span class="htag">#${h}</span>`).join(' ')}</div>
+        <button class="copy-btn" onclick="cp(this,'${encodeURIComponent((r.hashtags||[]).map(h=>'#'+h).join(' '))}')">📋 Copiar hashtags</button>
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('results').classList.add('show');
+  window.scrollTo(0,0);
+}
+
+function swTab(rid,panel,tabEl){
+  const card=tabEl.closest('.rc');
+  card.querySelectorAll('.rtab').forEach(t=>t.classList.remove('active'));
+  card.querySelectorAll('.rpanel').forEach(p=>p.classList.remove('active'));
+  tabEl.classList.add('active');
+  document.getElementById(`${rid}-${panel}`).classList.add('active');
+}
+
+function cp(btn,enc){
+  navigator.clipboard.writeText(decodeURIComponent(enc)).then(()=>{
+    const orig=btn.innerHTML;
+    btn.classList.add('ok');btn.innerHTML='✅ Copiado!';
+    setTimeout(()=>{btn.classList.remove('ok');btn.innerHTML=orig;},2000);
+  });
+}
+</script>
+</body>
+</html>
